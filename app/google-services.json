@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "544645717061",
+    "project_id": "mntap-85f0a",
+    "storage_bucket": "mntap-85f0a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544645717061:android:a6878075b803820711572c",
+        "android_client_info": {
+          "package_name": "com.aarsh.maintenanceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv9RwXJm4YG44BCdRYeYS9Mn8igcoNOow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
