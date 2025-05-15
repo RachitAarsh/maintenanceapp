@@ -55,7 +55,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
             
             Text(
                 text = "NFL IT Maintenance",
-                color = Color(0xFF388E3C),
+                color = Color(0xFF03A9F4),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.alpha(alphaAnim.value)
@@ -63,7 +63,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
             
             Text(
                 text = "Your IT Support Partner",
-                color = Color(0xFF388E3C).copy(alpha = 0.8f),
+                color = Color(0xFF03A9F4).copy(alpha = 0.8f),
                 fontSize = 16.sp,
                 modifier = Modifier.alpha(alphaAnim.value)
             )

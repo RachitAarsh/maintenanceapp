@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.aarsh.maintenanceapp.R
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
+import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -116,7 +117,7 @@ fun NewComplaintScreen(modifier: Modifier = Modifier) {
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Raise Ticket")
+            Text("Raise Ticket", color = Color.White)
         }
     }
 } 

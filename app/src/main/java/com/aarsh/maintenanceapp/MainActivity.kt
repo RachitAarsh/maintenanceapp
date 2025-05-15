@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import com.aarsh.maintenanceapp.ui.NewComplaintScreen
 import com.aarsh.maintenanceapp.ui.StatusScreen
 import com.aarsh.maintenanceapp.ui.SplashScreen
 import com.aarsh.maintenanceapp.ui.AuthScreen
+import com.aarsh.maintenanceapp.ui.ProfileScreen
 import com.aarsh.maintenanceapp.ui.theme.MaintenanceAppTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -56,12 +58,18 @@ sealed class Screen(val route: String, val icon: @Composable () -> Unit, val tex
         icon = { Icon(Icons.Filled.Info, contentDescription = "Announcements") },
         text = "Announcements"
     )
+    object Profile : Screen(
+        route = "profile",
+        icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
+        text = "Profile"
+    )
 }
 
 private val maintenanceTabRowScreens = listOf(
     Screen.Status,
     Screen.NewComplaint,
-    Screen.Announcements
+    Screen.Announcements,
+    Screen.Profile
 )
 
 @Composable
@@ -252,6 +260,48 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
                             LaunchedEffect(Unit) {
                                 navController.navigate("auth") {
                                     popUpTo(Screen.Announcements.route) { inclusive = true }
+                                }
+                            }
+                        }
+                    }
+                    composable(route = Screen.Profile.route) {
+                        if (isAuthenticated) {
+                            Scaffold(
+                                bottomBar = {
+                                    MaintenanceTabRow(
+                                        allScreens = maintenanceTabRowScreens,
+                                        onTabSelected = { screen ->
+                                            navController.navigate(screen.route) {
+                                                popUpTo(navController.graph.startDestinationId) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
+                                        },
+                                        currentScreen = currentScreen
+                                    )
+                                }
+                            ) { innerPadding ->
+                                ProfileScreen(
+                                    onLogout = {
+                                        isAuthenticated = false
+                                        navController.navigate("auth") {
+                                            popUpTo(Screen.Profile.route) { inclusive = true }
+                                        }
+                                    },
+                                    onDelete = {
+                                        isAuthenticated = false
+                                        navController.navigate("auth") {
+                                            popUpTo(Screen.Profile.route) { inclusive = true }
+                                        }
+                                    }
+                                )
+                            }
+                        } else {
+                            LaunchedEffect(Unit) {
+                                navController.navigate("auth") {
+                                    popUpTo(Screen.Profile.route) { inclusive = true }
                                 }
                             }
                         }
