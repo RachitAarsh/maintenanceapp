@@ -25,10 +25,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.security.ProviderInstaller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.tasks.await
+import android.widget.Toast
 
 sealed class Screen(val route: String, val icon: @Composable () -> Unit, val text: String) {
     object Status : Screen(
@@ -72,12 +75,15 @@ fun MaintenanceTabRow(
     }
 }
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListener {
     private lateinit var auth: FirebaseAuth
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Initialize security provider
+        ProviderInstaller.installIfNeededAsync(this, this)
         
         // Initialize Firebase in background
         coroutineScope.launch {
@@ -97,15 +103,26 @@ class MainActivity : ComponentActivity() {
                 
                 // Sign in anonymously if not already signed in
                 if (auth.currentUser == null) {
-                    auth.signInAnonymously()
-                        .addOnCompleteListener { task ->
-                            if (!task.isSuccessful) {
-                                // Handle sign in failure
-                            }
+                    try {
+                        auth.signInAnonymously().await()
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Authentication failed: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
+                    }
                 }
             } catch (e: Exception) {
-                // Handle initialization errors
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Initialization error: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
         
@@ -151,5 +168,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onProviderInstalled() {
+        // Security provider is up-to-date
+    }
+
+    override fun onProviderInstallFailed(errorCode: Int, recoveryIntent: android.content.Intent?) {
+        GoogleApiAvailability.getInstance().showErrorNotification(this, errorCode)
     }
 } 

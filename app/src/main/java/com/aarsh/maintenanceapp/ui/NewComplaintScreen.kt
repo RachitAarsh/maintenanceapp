@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.aarsh.maintenanceapp.R
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +28,7 @@ fun NewComplaintScreen(modifier: Modifier = Modifier) {
         val textView = layout.findViewById<TextView>(R.id.toast_text)
         textView.text = message
         
-        with(Toast(context)) {
+        Toast(context).apply {
             duration = Toast.LENGTH_SHORT
             view = layout
             show()
@@ -49,9 +48,8 @@ fun NewComplaintScreen(modifier: Modifier = Modifier) {
 
         var name by remember { mutableStateOf("") }
         var complaint by remember { mutableStateOf("") }
-        var selectedCategory by remember { mutableStateOf("Network") }
-        var expanded by remember { mutableStateOf(false) }
-        val categories = listOf("Network", "Hardware", "Software")
+        var selectedCategory by remember { mutableStateOf("") }
+        var selectedSubCategory by remember { mutableStateOf("") }
 
         OutlinedTextField(
             value = name,
@@ -60,75 +58,23 @@ fun NewComplaintScreen(modifier: Modifier = Modifier) {
             leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Name") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
+            isError = name.isBlank()
         )
 
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            OutlinedTextField(
-                value = selectedCategory,
-                onValueChange = { },
-                readOnly = true,
-                label = { Text("Category") },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(
-                            id = when (selectedCategory) {
-                                "Hardware" -> R.drawable.ic_hardware
-                                "Software" -> R.drawable.ic_software
-                                "Network" -> R.drawable.ic_network
-                                else -> R.drawable.ic_network
-                            }
-                        ),
-                        contentDescription = "Category Icon"
-                    )
-                },
-                modifier = Modifier.menuAnchor().fillMaxWidth()
-            )
-
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                categories.forEach { category ->
-                    DropdownMenuItem(
-                        text = { 
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    painter = painterResource(
-                                        id = when (category) {
-                                            "Hardware" -> R.drawable.ic_hardware
-                                            "Software" -> R.drawable.ic_software
-                                            "Network" -> R.drawable.ic_network
-                                            else -> R.drawable.ic_network
-                                        }
-                                    ),
-                                    contentDescription = "Category Icon"
-                                )
-                                Text(category)
-                            }
-                        },
-                        onClick = { 
-                            selectedCategory = category
-                            expanded = false
-                        }
-                    )
-                }
+        ComplaintForm(
+            onCategorySelected = { category ->
+                selectedCategory = category
+            },
+            onSubCategorySelected = { subCategory ->
+                selectedSubCategory = subCategory
             }
-        }
+        )
 
         OutlinedTextField(
             value = complaint,
             onValueChange = { complaint = it },
-            label = { Text("Complaint") },
+            label = { Text("Complaint (Optional)") },
             leadingIcon = { Icon(Icons.Default.MailOutline, contentDescription = "Complaint") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,12 +85,13 @@ fun NewComplaintScreen(modifier: Modifier = Modifier) {
 
         Button(
             onClick = {
-                if (name.isNotBlank() && complaint.isNotBlank()) {
+                if (name.isNotBlank() && selectedCategory.isNotBlank() && selectedSubCategory.isNotBlank()) {
                     val db = FirebaseFirestore.getInstance()
                     val complaintMap = hashMapOf(
                         "name" to name,
                         "complaint" to complaint,
                         "category" to selectedCategory,
+                        "subCategory" to selectedSubCategory,
                         "status" to "Pending",
                         "timestamp" to Date()
                     )
@@ -154,10 +101,17 @@ fun NewComplaintScreen(modifier: Modifier = Modifier) {
                         .addOnSuccessListener {
                             name = ""
                             complaint = ""
-                            selectedCategory = "Network"
-                            expanded = false
+                            selectedCategory = ""
+                            selectedSubCategory = ""
                             showCustomToast("Your complaint has been registered")
                         }
+                } else {
+                    val missingFields = mutableListOf<String>()
+                    if (name.isBlank()) missingFields.add("Name")
+                    if (selectedCategory.isBlank()) missingFields.add("Category")
+                    if (selectedSubCategory.isBlank()) missingFields.add("Sub-Category")
+                    
+                    showCustomToast("Please fill in: ${missingFields.joinToString(", ")}")
                 }
             },
             modifier = Modifier.fillMaxWidth()

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.aarsh.maintenanceapp.ui.theme.MaintenanceBackground
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 @Composable
@@ -112,9 +113,25 @@ fun StatusScreen(modifier: Modifier = Modifier) {
                                 )
                             }
                             
+                            // Category and Sub-Category Row
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp),
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Text(
+                                    text = "${complaint["category"] as? String ?: ""} - ${complaint["subCategory"] as? String ?: ""}",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                )
+                            }
+                            
                             Text(
                                 text = complaint["complaint"] as? String ?: "",
                                 style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Normal,
                                 modifier = Modifier.padding(vertical = 12.dp)
                             )
                             
@@ -123,7 +140,7 @@ fun StatusScreen(modifier: Modifier = Modifier) {
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = complaint["category"] as? String ?: "",
+                                    text = dateFormat.format((complaint["timestamp"] as? com.google.firebase.Timestamp)?.toDate() ?: Date()),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                 )
