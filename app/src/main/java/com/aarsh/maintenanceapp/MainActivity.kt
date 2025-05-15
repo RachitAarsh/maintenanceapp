@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.aarsh.maintenanceapp.ui.AnnouncementsScreen
 import com.aarsh.maintenanceapp.ui.NewComplaintScreen
 import com.aarsh.maintenanceapp.ui.StatusScreen
+import com.aarsh.maintenanceapp.ui.SplashScreen
 import com.aarsh.maintenanceapp.ui.theme.MaintenanceAppTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +35,11 @@ import kotlinx.coroutines.tasks.await
 import android.widget.Toast
 
 sealed class Screen(val route: String, val icon: @Composable () -> Unit, val text: String) {
+    object Splash : Screen(
+        route = "splash",
+        icon = { Icon(Icons.Filled.List, contentDescription = "Splash") },
+        text = "Splash"
+    )
     object Status : Screen(
         route = "status",
         icon = { Icon(Icons.Filled.List, contentDescription = "Status") },
@@ -133,36 +139,80 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
                 val currentDestination = currentBackStack?.destination
                 val currentScreen = maintenanceTabRowScreens.find { it.route == currentDestination?.route } ?: Screen.Status
 
-                Scaffold(
-                    bottomBar = {
-                        MaintenanceTabRow(
-                            allScreens = maintenanceTabRowScreens,
-                            onTabSelected = { screen ->
-                                navController.navigate(screen.route) {
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.Splash.route
+                ) {
+                    composable(route = Screen.Splash.route) {
+                        SplashScreen(
+                            onSplashFinished = {
+                                navController.navigate(Screen.Status.route) {
+                                    popUpTo(Screen.Splash.route) { inclusive = true }
                                 }
-                            },
-                            currentScreen = currentScreen
+                            }
                         )
                     }
-                ) { innerPadding ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.Status.route,
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        composable(route = Screen.Status.route) {
-                            StatusScreen()
+                    composable(route = Screen.Status.route) {
+                        Scaffold(
+                            bottomBar = {
+                                MaintenanceTabRow(
+                                    allScreens = maintenanceTabRowScreens,
+                                    onTabSelected = { screen ->
+                                        navController.navigate(screen.route) {
+                                            popUpTo(navController.graph.startDestinationId) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    },
+                                    currentScreen = currentScreen
+                                )
+                            }
+                        ) { innerPadding ->
+                            StatusScreen(modifier = Modifier.padding(innerPadding))
                         }
-                        composable(route = Screen.NewComplaint.route) {
-                            NewComplaintScreen()
+                    }
+                    composable(route = Screen.NewComplaint.route) {
+                        Scaffold(
+                            bottomBar = {
+                                MaintenanceTabRow(
+                                    allScreens = maintenanceTabRowScreens,
+                                    onTabSelected = { screen ->
+                                        navController.navigate(screen.route) {
+                                            popUpTo(navController.graph.startDestinationId) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    },
+                                    currentScreen = currentScreen
+                                )
+                            }
+                        ) { innerPadding ->
+                            NewComplaintScreen(modifier = Modifier.padding(innerPadding))
                         }
-                        composable(route = Screen.Announcements.route) {
-                            AnnouncementsScreen()
+                    }
+                    composable(route = Screen.Announcements.route) {
+                        Scaffold(
+                            bottomBar = {
+                                MaintenanceTabRow(
+                                    allScreens = maintenanceTabRowScreens,
+                                    onTabSelected = { screen ->
+                                        navController.navigate(screen.route) {
+                                            popUpTo(navController.graph.startDestinationId) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    },
+                                    currentScreen = currentScreen
+                                )
+                            }
+                        ) { innerPadding ->
+                            AnnouncementsScreen(modifier = Modifier.padding(innerPadding))
                         }
                     }
                 }
