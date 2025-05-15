@@ -19,6 +19,7 @@ import com.aarsh.maintenanceapp.ui.AnnouncementsScreen
 import com.aarsh.maintenanceapp.ui.NewComplaintScreen
 import com.aarsh.maintenanceapp.ui.StatusScreen
 import com.aarsh.maintenanceapp.ui.SplashScreen
+import com.aarsh.maintenanceapp.ui.AuthScreen
 import com.aarsh.maintenanceapp.ui.theme.MaintenanceAppTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -135,6 +136,7 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
         setContent {
             MaintenanceAppTheme {
                 val navController = rememberNavController()
+                var isAuthenticated by remember { mutableStateOf(FirebaseAuth.getInstance().currentUser != null) }
                 val currentBackStack by navController.currentBackStackEntryAsState()
                 val currentDestination = currentBackStack?.destination
                 val currentScreen = maintenanceTabRowScreens.find { it.route == currentDestination?.route } ?: Screen.Status
@@ -146,73 +148,112 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
                     composable(route = Screen.Splash.route) {
                         SplashScreen(
                             onSplashFinished = {
-                                navController.navigate(Screen.Status.route) {
-                                    popUpTo(Screen.Splash.route) { inclusive = true }
+                                if (FirebaseAuth.getInstance().currentUser == null) {
+                                    navController.navigate("auth") {
+                                        popUpTo(Screen.Splash.route) { inclusive = true }
+                                    }
+                                } else {
+                                    navController.navigate(Screen.Status.route) {
+                                        popUpTo(Screen.Splash.route) { inclusive = true }
+                                    }
                                 }
                             }
                         )
                     }
-                    composable(route = Screen.Status.route) {
-                        Scaffold(
-                            bottomBar = {
-                                MaintenanceTabRow(
-                                    allScreens = maintenanceTabRowScreens,
-                                    onTabSelected = { screen ->
-                                        navController.navigate(screen.route) {
-                                            popUpTo(navController.graph.startDestinationId) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
-                                    },
-                                    currentScreen = currentScreen
-                                )
+                    composable("auth") {
+                        AuthScreen(onAuthSuccess = {
+                            isAuthenticated = true
+                            navController.navigate(Screen.Status.route) {
+                                popUpTo("auth") { inclusive = true }
                             }
-                        ) { innerPadding ->
-                            StatusScreen(modifier = Modifier.padding(innerPadding))
+                        })
+                    }
+                    composable(route = Screen.Status.route) {
+                        if (isAuthenticated) {
+                            Scaffold(
+                                bottomBar = {
+                                    MaintenanceTabRow(
+                                        allScreens = maintenanceTabRowScreens,
+                                        onTabSelected = { screen ->
+                                            navController.navigate(screen.route) {
+                                                popUpTo(navController.graph.startDestinationId) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
+                                        },
+                                        currentScreen = currentScreen
+                                    )
+                                }
+                            ) { innerPadding ->
+                                StatusScreen(modifier = Modifier.padding(innerPadding))
+                            }
+                        } else {
+                            // If not authenticated, redirect to auth
+                            LaunchedEffect(Unit) {
+                                navController.navigate("auth") {
+                                    popUpTo(Screen.Status.route) { inclusive = true }
+                                }
+                            }
                         }
                     }
                     composable(route = Screen.NewComplaint.route) {
-                        Scaffold(
-                            bottomBar = {
-                                MaintenanceTabRow(
-                                    allScreens = maintenanceTabRowScreens,
-                                    onTabSelected = { screen ->
-                                        navController.navigate(screen.route) {
-                                            popUpTo(navController.graph.startDestinationId) {
-                                                saveState = true
+                        if (isAuthenticated) {
+                            Scaffold(
+                                bottomBar = {
+                                    MaintenanceTabRow(
+                                        allScreens = maintenanceTabRowScreens,
+                                        onTabSelected = { screen ->
+                                            navController.navigate(screen.route) {
+                                                popUpTo(navController.graph.startDestinationId) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
                                             }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
-                                    },
-                                    currentScreen = currentScreen
-                                )
+                                        },
+                                        currentScreen = currentScreen
+                                    )
+                                }
+                            ) { innerPadding ->
+                                NewComplaintScreen(modifier = Modifier.padding(innerPadding))
                             }
-                        ) { innerPadding ->
-                            NewComplaintScreen(modifier = Modifier.padding(innerPadding))
+                        } else {
+                            LaunchedEffect(Unit) {
+                                navController.navigate("auth") {
+                                    popUpTo(Screen.NewComplaint.route) { inclusive = true }
+                                }
+                            }
                         }
                     }
                     composable(route = Screen.Announcements.route) {
-                        Scaffold(
-                            bottomBar = {
-                                MaintenanceTabRow(
-                                    allScreens = maintenanceTabRowScreens,
-                                    onTabSelected = { screen ->
-                                        navController.navigate(screen.route) {
-                                            popUpTo(navController.graph.startDestinationId) {
-                                                saveState = true
+                        if (isAuthenticated) {
+                            Scaffold(
+                                bottomBar = {
+                                    MaintenanceTabRow(
+                                        allScreens = maintenanceTabRowScreens,
+                                        onTabSelected = { screen ->
+                                            navController.navigate(screen.route) {
+                                                popUpTo(navController.graph.startDestinationId) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
                                             }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
-                                    },
-                                    currentScreen = currentScreen
-                                )
+                                        },
+                                        currentScreen = currentScreen
+                                    )
+                                }
+                            ) { innerPadding ->
+                                AnnouncementsScreen(modifier = Modifier.padding(innerPadding))
                             }
-                        ) { innerPadding ->
-                            AnnouncementsScreen(modifier = Modifier.padding(innerPadding))
+                        } else {
+                            LaunchedEffect(Unit) {
+                                navController.navigate("auth") {
+                                    popUpTo(Screen.Announcements.route) { inclusive = true }
+                                }
+                            }
                         }
                     }
                 }
