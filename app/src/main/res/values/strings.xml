@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NFL IT Maintenance App</string>
+    <string name="app_name">NFL IT Maintenance </string>
+    <string name="app_id">1:123456789012:android:1234567890abcdef</string>
 </resources>

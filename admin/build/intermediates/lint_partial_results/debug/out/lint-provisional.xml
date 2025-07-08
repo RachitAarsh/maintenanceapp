@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.2.2" type="conditional_incidents">
+
+    <incident
+        id="UnusedAttribute"
+        severity="warning"
+        message="">
+        <fix-data minSdk="fffffffffe000000" requiresApi="ffffffff00000000"/>
+        <location
+            file="${:admin*debug*MAIN*sourceProvider*0*manifest*0}"
+            line="18"
+            column="9"
+            startOffset="815"
+            endLine="18"
+            endColumn="51"
+            endOffset="857"/>
+        <map>
+            <api-levels id="minSdk"
+                value="ffffffffc0000000"/>
+            <api-levels id="requiresApi"
+                value="ffffffff00000000"/>
+            <entry
+                name="message"
+                string="Attribute `enableOnBackInvokedCallback` is only used in API level 33 and higher (current min is %1$s)"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 31">
+        <fix-replace
+            description="Delete tools:targetApi"
+            replacement="">
+            <range
+                file="${:admin*debug*MAIN*sourceProvider*0*manifest*0}"
+                startOffset="867"
+                endOffset="887"/>
+        </fix-replace>
+        <location
+            file="${:admin*debug*MAIN*sourceProvider*0*manifest*0}"
+            line="19"
+            column="9"
+            startOffset="867"
+            endLine="19"
+            endColumn="29"
+            endOffset="887"/>
+        <map>
+            <condition minGE="ffffffffc0000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="NewApi"
+        severity="error"
+        message="">
+        <fix-data minSdk="fffffffffe000000" requiresApi="fffffffffc000000"/>
+        <location
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/values/themes.xml"
+            line="9"
+            column="15"
+            startOffset="529"
+            endLine="9"
+            endColumn="54"
+            endOffset="568"/>
+        <map>
+            <api-levels id="minSdk"
+                value="fffffffffe000000"/>
+            <api-levels id="requiresApi"
+                value="fffffffffc000000"/>
+            <entry
+                name="message"
+                string="`android:windowLightNavigationBar` requires API level 27 (current min is %1$s)"/>
+        </map>
+    </incident>
+
+    <incident
+        id="NewApi"
+        severity="error"
+        message="">
+        <fix-data minSdk="fffffffffe000000" requiresApi="fffffffff0000000"/>
+        <location
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/values/themes.xml"
+            line="10"
+            column="15"
+            startOffset="595"
+            endLine="10"
+            endColumn="58"
+            endOffset="638"/>
+        <map>
+            <api-levels id="minSdk"
+                value="fffffffffe000000"/>
+            <api-levels id="requiresApi"
+                value="fffffffff0000000"/>
+            <entry
+                name="message"
+                string="`android:enforceNavigationBarContrast` requires API level 29 (current min is %1$s)"/>
+        </map>
+    </incident>
+
+    <incident
+        id="NewApi"
+        severity="error"
+        message="">
+        <fix-data minSdk="fffffffffe000000" requiresApi="fffffffff0000000"/>
+        <location
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/values/themes.xml"
+            line="11"
+            column="15"
+            startOffset="666"
+            endLine="11"
+            endColumn="54"
+            endOffset="705"/>
+        <map>
+            <api-levels id="minSdk"
+                value="fffffffffe000000"/>
+            <api-levels id="requiresApi"
+                value="fffffffff0000000"/>
+            <entry
+                name="message"
+                string="`android:enforceStatusBarContrast` requires API level 29 (current min is %1$s)"/>
+        </map>
+    </incident>
+
+    <incident
+        id="NewApi"
+        severity="error"
+        message="">
+        <fix-data minSdk="fffffffffe000000" requiresApi="ffffffffc0000000"/>
+        <location
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/values/themes.xml"
+            line="12"
+            column="15"
+            startOffset="733"
+            endLine="12"
+            endColumn="58"
+            endOffset="776"/>
+        <map>
+            <api-levels id="minSdk"
+                value="fffffffffe000000"/>
+            <api-levels id="requiresApi"
+                value="ffffffffc0000000"/>
+            <entry
+                name="message"
+                string="`android:windowSplashScreenBackground` requires API level 31 (current min is %1$s)"/>
+        </map>
+    </incident>
+
+    <incident
+        id="NewApi"
+        severity="error"
+        message="">
+        <fix-data minSdk="fffffffffe000000" requiresApi="ffffffffc0000000"/>
+        <location
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/values/themes.xml"
+            line="13"
+            column="15"
+            startOffset="825"
+            endLine="13"
+            endColumn="60"
+            endOffset="870"/>
+        <map>
+            <api-levels id="minSdk"
+                value="fffffffffe000000"/>
+            <api-levels id="requiresApi"
+                value="ffffffffc0000000"/>
+            <entry
+                name="message"
+                string="`android:windowSplashScreenAnimatedIcon` requires API level 31 (current min is %1$s)"/>
+        </map>
+    </incident>
+
+    <incident
+        id="NewApi"
+        severity="error"
+        message="">
+        <fix-data minSdk="fffffffffe000000" requiresApi="ffffffffc0000000"/>
+        <location
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/values/themes.xml"
+            line="14"
+            column="15"
+            startOffset="919"
+            endLine="14"
+            endColumn="61"
+            endOffset="965"/>
+        <map>
+            <api-levels id="minSdk"
+                value="fffffffffe000000"/>
+            <api-levels id="requiresApi"
+                value="ffffffffc0000000"/>
+            <entry
+                name="message"
+                string="`android:windowSplashScreenBrandingImage` requires API level 31 (current min is %1$s)"/>
+        </map>
+    </incident>
+
+</incidents>

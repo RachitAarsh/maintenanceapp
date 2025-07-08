@@ -1,0 +1,429 @@
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\values\themes.xml:9: Error: android:windowLightNavigationBar requires API level 27 (current min is 26) [NewApi]
+        <item name="android:windowLightNavigationBar">true</item>
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\values\themes.xml:10: Error: android:enforceNavigationBarContrast requires API level 29 (current min is 26) [NewApi]
+        <item name="android:enforceNavigationBarContrast">false</item>
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\values\themes.xml:11: Error: android:enforceStatusBarContrast requires API level 29 (current min is 26) [NewApi]
+        <item name="android:enforceStatusBarContrast">false</item>
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\values\themes.xml:12: Error: android:windowSplashScreenBackground requires API level 31 (current min is 26) [NewApi]
+        <item name="android:windowSplashScreenBackground">@android:color/transparent</item>
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\values\themes.xml:13: Error: android:windowSplashScreenAnimatedIcon requires API level 31 (current min is 26) [NewApi]
+        <item name="android:windowSplashScreenAnimatedIcon">@android:color/transparent</item>
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\values\themes.xml:14: Error: android:windowSplashScreenBrandingImage requires API level 31 (current min is 26) [NewApi]
+        <item name="android:windowSplashScreenBrandingImage">@android:color/transparent</item>
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "NewApi":
+   This check scans through all the Android API calls in the application and
+   warns about any calls that are not available on all versions targeted by
+   this application (according to its minimum SDK attribute in the manifest).
+
+   If you really want to use this API and don't need to support older devices
+   just set the minSdkVersion in your build.gradle or AndroidManifest.xml
+   files.
+
+   If your code is deliberately accessing newer APIs, and you have ensured
+   (e.g. with conditional execution) that this code will only ever be called
+   on a supported platform, then you can annotate your class or method with
+   the @TargetApi annotation specifying the local minimum SDK to apply, such
+   as @TargetApi(11), such that this check considers 11 rather than your
+   manifest file's minimum SDK as the required API level.
+
+   If you are deliberately setting android: attributes in style definitions,
+   make sure you place this in a values-vNN folder in order to avoid running
+   into runtime conflicts on certain devices where manufacturers have added
+   custom attributes whose ids conflict with the new ones on later platforms.
+
+   Similarly, you can use tools:targetApi="11" in an XML file to indicate that
+   the element will only be inflated in an adequate context.
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:14: Warning: Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details. [OldTargetApi]
+        targetSdk 34
+        ~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:14: Warning: Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details. [OldTargetApi]
+        targetSdk = 34
+        ~~~~~~~~~~~~~~
+
+   Explanation for issues of type "OldTargetApi":
+   When your application runs on a version of Android that is more recent than
+   your targetSdkVersion specifies that it has been tested with, various
+   compatibility modes kick in. This ensures that your application continues
+   to work, but it may look out of place. For example, if the targetSdkVersion
+   is less than 14, your app may get an option button in the UI.
+
+   To fix this issue, set the targetSdkVersion to the highest available value.
+   Then test your app to make sure everything works correctly. You may want to
+   consult the compatibility notes to see what changes apply to each version
+   you are adding support for:
+   https://developer.android.com/reference/android/os/Build.VERSION_CODES.html
+   as well as follow this guide:
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.
+   html
+
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.html
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\AndroidManifest.xml:18: Warning: Attribute enableOnBackInvokedCallback is only used in API level 33 and higher (current min is 31) [UnusedAttribute]
+        android:enableOnBackInvokedCallback="true"
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UnusedAttribute":
+   This check finds attributes set in XML files that were introduced in a
+   version newer than the oldest version targeted by your application (with
+   the minSdkVersion attribute).
+
+   This is not an error; the application will simply ignore the attribute.
+   However, if the attribute is important to the appearance or functionality
+   of your application, you should consider finding an alternative way to
+   achieve the same result with only available attributes, and then you can
+   optionally create a copy of the layout in a layout-vNN folder which will be
+   used on API NN or higher where you can take advantage of the newer
+   attribute.
+
+   Note: This check does not only apply to attributes. For example, some tags
+   can be unused too, such as the new <tag> element in layouts introduced in
+   API 21.
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\AndroidManifest.xml:28: Warning: Redundant label can be removed [RedundantLabel]
+            android:label="@string/app_name"
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "RedundantLabel":
+   When an activity does not have a label attribute, it will use the one from
+   the application tag. Since the application has already specified the same
+   label, the label on this activity can be omitted.
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:51: Warning: A newer version of androidx.core:core-ktx than 1.12.0 is available: 1.16.0 [GradleDependency]
+    implementation 'androidx.core:core-ktx:1.12.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:53: Warning: A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.7.0 is available: 2.9.1 [GradleDependency]
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:54: Warning: A newer version of androidx.activity:activity-compose than 1.8.2 is available: 1.10.1 [GradleDependency]
+    implementation 'androidx.activity:activity-compose:1.8.2'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:55: Warning: A newer version of androidx.compose:compose-bom than 2023.08.00 is available: 2025.06.01 [GradleDependency]
+    implementation platform('androidx.compose:compose-bom:2023.08.00')
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:60: Warning: A newer version of androidx.navigation:navigation-compose than 2.7.6 is available: 2.9.0 [GradleDependency]
+    implementation 'androidx.navigation:navigation-compose:2.7.6'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:63: Warning: A newer version of com.google.firebase:firebase-bom than 32.7.1 is available: 33.16.0 [GradleDependency]
+    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:68: Warning: A newer version of com.google.android.gms:play-services-auth than 20.7.0 is available: 21.3.0 [GradleDependency]
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:69: Warning: A newer version of com.google.android.gms:play-services-base than 18.3.0 is available: 18.7.0 [GradleDependency]
+    implementation 'com.google.android.gms:play-services-base:18.3.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:70: Warning: A newer version of com.google.android.gms:play-services-tasks than 18.1.0 is available: 18.3.0 [GradleDependency]
+    implementation 'com.google.android.gms:play-services-tasks:18.1.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:76: Warning: A newer version of androidx.test.ext:junit than 1.1.5 is available: 1.2.1 [GradleDependency]
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:77: Warning: A newer version of androidx.test.espresso:espresso-core than 3.5.1 is available: 3.6.1 [GradleDependency]
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:78: Warning: A newer version of androidx.compose:compose-bom than 2023.08.00 is available: 2025.06.01 [GradleDependency]
+    androidTestImplementation platform('androidx.compose:compose-bom:2023.08.00')
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:64: Warning: A newer version of androidx.core:core-ktx than 1.12.0 is available: 1.16.0 [GradleDependency]
+    implementation("androidx.core:core-ktx:1.12.0")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:65: Warning: A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.7.0 is available: 2.9.1 [GradleDependency]
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:66: Warning: A newer version of androidx.activity:activity-compose than 1.8.2 is available: 1.10.1 [GradleDependency]
+    implementation("androidx.activity:activity-compose:1.8.2")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:72: Warning: A newer version of androidx.compose.material:material-icons-extended than 1.5.4 is available: 1.7.8 [GradleDependency]
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:73: Warning: A newer version of androidx.navigation:navigation-compose than 2.7.7 is available: 2.9.0 [GradleDependency]
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:80: Warning: A newer version of com.google.android.gms:play-services-auth than 20.7.0 is available: 21.3.0 [GradleDependency]
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:86: Warning: A newer version of androidx.test.ext:junit than 1.1.5 is available: 1.2.1 [GradleDependency]
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:87: Warning: A newer version of androidx.test.espresso:espresso-core than 3.5.1 is available: 3.6.1 [GradleDependency]
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\gradle\libs.versions.toml:2: Warning: A newer version of com.android.application than 8.9.2 is available: 8.11.0 [GradleDependency]
+agp = "8.9.2"
+      ~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\gradle\libs.versions.toml:8: Warning: A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.8.7 is available: 2.9.1 [GradleDependency]
+lifecycleRuntimeKtx = "2.8.7"
+                      ~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\gradle\libs.versions.toml:10: Warning: A newer version of androidx.compose:compose-bom than 2024.09.00 is available: 2025.06.01 [GradleDependency]
+composeBom = "2024.09.00"
+             ~~~~~~~~~~~~
+
+   Explanation for issues of type "GradleDependency":
+   This detector looks for usages of libraries where the version you are using
+   is not the current stable release. Using older versions is fine, and there
+   are cases where you deliberately want to stick with an older version.
+   However, you may simply not be aware that a more recent version is
+   available, and that is what this lint check helps find.
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\MainActivity.kt:404: Error: Content padding parameter paddingValues is not used [UnusedMaterial3ScaffoldPaddingParameter from androidx.compose.material3]
+            ) { paddingValues ->
+                ~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\MainActivity.kt:464: Error: Content padding parameter paddingValues is not used [UnusedMaterial3ScaffoldPaddingParameter from androidx.compose.material3]
+            ) { paddingValues ->
+                ~~~~~~~~~~~~~
+
+   Explanation for issues of type "UnusedMaterial3ScaffoldPaddingParameter":
+   The content lambda in Scaffold has a padding parameter which will include
+   any inner padding for the content due to app bars. If this parameter is
+   ignored, then content may be obscured by the app bars resulting in visual
+   issues or elements that can't be interacted with.
+
+   Vendor: Jetpack Compose
+   Identifier: androidx.compose.material3
+   Feedback: https://issuetracker.google.com/issues/new?component=612128
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\AuthScreen.kt:42: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var selectedTab by remember { mutableStateOf(0) }
+                                  ~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\ComplaintsByStatusScreen.kt:51: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var reloadKey by remember { mutableStateOf(0) }
+                                ~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\DashboardScreen.kt:32: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var pendingCount by remember { mutableStateOf(0) }
+                                   ~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\DashboardScreen.kt:33: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var inProgressCount by remember { mutableStateOf(0) }
+                                      ~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\DashboardScreen.kt:34: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var resolvedCount by remember { mutableStateOf(0) }
+                                    ~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\DashboardScreen.kt:35: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var totalRequests by remember { mutableStateOf(0) }
+                                    ~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\StatisticsScreen.kt:24: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var totalRequests by remember { mutableStateOf(0) }
+                                    ~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\StatisticsScreen.kt:25: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var pendingRequests by remember { mutableStateOf(0) }
+                                      ~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\StatisticsScreen.kt:26: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var inProgressRequests by remember { mutableStateOf(0) }
+                                         ~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\java\com\aarsh\maintenanceapp\admin\ui\screens\StatisticsScreen.kt:27: Information: Prefer mutableIntStateOf instead of mutableStateOf [AutoboxingStateCreation from androidx.compose.runtime]
+    var resolvedRequests by remember { mutableStateOf(0) }
+                                       ~~~~~~~~~~~~~~
+
+   Explanation for issues of type "AutoboxingStateCreation":
+   Calling mutableStateOf<T>() when T is either backed by a primitive type on
+   the JVM or is a value class results in a state implementation that requires
+   all state values to be boxed. This usually causes an additional allocation
+   for each state write, and adds some additional work to auto-unbox values
+   when reading the value of the state. Instead, prefer to use a specialized
+   primitive state implementation for Int, Long, Float, and Double when the
+   state does not need to track null values and does not override the default
+   SnapshotMutationPolicy.
+
+   Vendor: Jetpack Compose
+   Identifier: androidx.compose.runtime
+   Feedback: https://issuetracker.google.com/issues/new?component=612128
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\mipmap-anydpi\ic_launcher.xml:2: Warning: The resource R.mipmap.ic_launcher appears to be unused [UnusedResources]
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+^
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\drawable\ic_launcher_background.xml:2: Warning: The resource R.drawable.ic_launcher_background appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\drawable\ic_launcher_foreground.xml:1: Warning: The resource R.drawable.ic_launcher_foreground appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\mipmap-anydpi\ic_launcher_round.xml:2: Warning: The resource R.mipmap.ic_launcher_round appears to be unused [UnusedResources]
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+^
+
+   Explanation for issues of type "UnusedResources":
+   Unused resources make applications larger and slow down builds.
+
+
+   The unused resource check can ignore tests. If you want to include
+   resources that are only referenced from tests, consider packaging them in a
+   test source set instead.
+
+   You can include test sources in the unused resource check by setting the
+   system property lint.unused-resources.include-tests =true, and to exclude
+   them (usually for performance reasons), use
+   lint.unused-resources.exclude-tests =true.
+   ,
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\drawable\ic_nfl_logo.png: Warning: Launcher icon used as round icon did not have a circular shape [IconLauncherShape]
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\drawable\ic_nfl_logoadminss.png: Warning: Launcher icons should not fill every pixel of their square region; see the design guide for details [IconLauncherShape]
+
+   Explanation for issues of type "IconLauncherShape":
+   According to the Android Design Guide
+   (https://d.android.com/r/studio-ui/designer/material/iconography) your
+   launcher icons should "use a distinct silhouette", a "three-dimensional,
+   front view, with a slight perspective as if viewed from above, so that
+   users perceive some depth."
+
+   The unique silhouette implies that your launcher icon should not be a
+   filled square.
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\drawable\ic_nfl_logo.png: Warning: Found bitmap drawable res/drawable/ic_nfl_logo.png in densityless folder [IconLocation]
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\src\main\res\drawable\ic_nfl_logoadminss.png: Warning: Found bitmap drawable res/drawable/ic_nfl_logoadminss.png in densityless folder [IconLocation]
+
+   Explanation for issues of type "IconLocation":
+   The res/drawable folder is intended for density-independent graphics such
+   as shapes defined in XML. For bitmaps, move it to drawable-mdpi and
+   consider providing higher and lower resolution versions in drawable-ldpi,
+   drawable-hdpi and drawable-xhdpi. If the icon really is density independent
+   (for example a solid color) you can place it in drawable-nodpi.
+
+   https://developer.android.com/guide/practices/screens_support.html
+
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:51: Warning: Use version catalog instead (androidx.core:core-ktx is already available as androidx-core-ktx, but using version 1.16.0 instead) [UseTomlInstead]
+    implementation 'androidx.core:core-ktx:1.12.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:52: Warning: Use version catalog instead [UseTomlInstead]
+    implementation platform('org.jetbrains.kotlin:kotlin-bom:1.9.0')
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:53: Warning: Use version catalog instead (androidx.lifecycle:lifecycle-runtime-ktx is already available as androidx-lifecycle-runtime-ktx, but using version 2.8.7 instead) [UseTomlInstead]
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:54: Warning: Use version catalog instead (androidx.activity:activity-compose is already available as androidx-activity-compose, but using version 1.10.1 instead) [UseTomlInstead]
+    implementation 'androidx.activity:activity-compose:1.8.2'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:55: Warning: Use version catalog instead (androidx.compose:compose-bom is already available as androidx-compose-bom, but using version 2024.09.00 instead) [UseTomlInstead]
+    implementation platform('androidx.compose:compose-bom:2023.08.00')
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:56: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'androidx.compose.ui:ui'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:57: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'androidx.compose.ui:ui-graphics'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:58: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:59: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'androidx.compose.material3:material3'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:60: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'androidx.navigation:navigation-compose:2.7.6'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:63: Warning: Use version catalog instead [UseTomlInstead]
+    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:64: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'com.google.firebase:firebase-auth-ktx'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:65: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:68: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:69: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'com.google.android.gms:play-services-base:18.3.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:70: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'com.google.android.gms:play-services-tasks:18.1.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:73: Warning: Use version catalog instead [UseTomlInstead]
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:75: Warning: Use the existing version catalog reference (libs.junit) instead [UseTomlInstead]
+    testImplementation 'junit:junit:4.13.2'
+                       ~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:76: Warning: Use version catalog instead (androidx.test.ext:junit is already available as androidx-junit, but using version 1.2.1 instead) [UseTomlInstead]
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:77: Warning: Use version catalog instead (androidx.test.espresso:espresso-core is already available as androidx-espresso-core, but using version 3.6.1 instead) [UseTomlInstead]
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:78: Warning: Use version catalog instead (androidx.compose:compose-bom is already available as androidx-compose-bom, but using version 2024.09.00 instead) [UseTomlInstead]
+    androidTestImplementation platform('androidx.compose:compose-bom:2023.08.00')
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:79: Warning: Use version catalog instead [UseTomlInstead]
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:80: Warning: Use version catalog instead [UseTomlInstead]
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle:81: Warning: Use version catalog instead [UseTomlInstead]
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:64: Warning: Use version catalog instead (androidx.core:core-ktx is already available as androidx-core-ktx, but using version 1.16.0 instead) [UseTomlInstead]
+    implementation("androidx.core:core-ktx:1.12.0")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:65: Warning: Use version catalog instead (androidx.lifecycle:lifecycle-runtime-ktx is already available as androidx-lifecycle-runtime-ktx, but using version 2.8.7 instead) [UseTomlInstead]
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:66: Warning: Use version catalog instead (androidx.activity:activity-compose is already available as androidx-activity-compose, but using version 1.10.1 instead) [UseTomlInstead]
+    implementation("androidx.activity:activity-compose:1.8.2")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:68: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("androidx.compose.ui:ui")
+                    ~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:69: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("androidx.compose.ui:ui-graphics")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:70: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("androidx.compose.ui:ui-tooling-preview")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:71: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("androidx.compose.material3:material3")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:72: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:73: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:77: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("com.google.firebase:firebase-auth-ktx")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:78: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("com.google.firebase:firebase-firestore-ktx")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:79: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("com.google.firebase:firebase-common-ktx")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:80: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:83: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:85: Warning: Use the existing version catalog reference (libs.junit) instead [UseTomlInstead]
+    testImplementation("junit:junit:4.13.2")
+                        ~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:86: Warning: Use version catalog instead (androidx.test.ext:junit is already available as androidx-junit, but using version 1.2.1 instead) [UseTomlInstead]
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:87: Warning: Use version catalog instead (androidx.test.espresso:espresso-core is already available as androidx-espresso-core, but using version 3.6.1 instead) [UseTomlInstead]
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:89: Warning: Use version catalog instead [UseTomlInstead]
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:90: Warning: Use version catalog instead [UseTomlInstead]
+    debugImplementation("androidx.compose.ui:ui-tooling")
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\aarsh\AndroidStudioProjects\maintenanceapp\admin\build.gradle.kts:91: Warning: Use version catalog instead [UseTomlInstead]
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UseTomlInstead":
+   If your project is using a libs.versions.toml file, you should place all
+   Gradle dependencies in the TOML file. This lint check looks for version
+   declarations outside of the TOML file and suggests moving them (and in the
+   IDE, provides a quickfix to performing the operation automatically).
+
+8 errors, 79 warnings

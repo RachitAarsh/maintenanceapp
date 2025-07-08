@@ -30,12 +30,12 @@ fun AnnouncementsScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp)
+            .padding(16.dp)
     ) {
         Text(
             text = "Announcements",
-            style = MaterialTheme.typography.displayMedium,
-            modifier = Modifier.padding(bottom = 24.dp)
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
         var announcements by remember { mutableStateOf<List<Announcement>>(emptyList()) }
@@ -76,6 +76,7 @@ fun AnnouncementsScreen(modifier: Modifier = Modifier) {
                             containerColor = when (announcement.priority) {
                                 "High" -> Color(0xFFFFEBEE)
                                 "Low" -> Color(0xFFE8F5E9)
+                                "Normal" -> Color(0xFFFFF9C4)
                                 else -> MaterialTheme.colorScheme.surface
                             }
                         ),
@@ -105,6 +106,7 @@ fun AnnouncementsScreen(modifier: Modifier = Modifier) {
                                     tint = when (announcement.priority) {
                                         "High" -> Color(0xFFD32F2F)
                                         "Low" -> Color(0xFF2E7D32)
+                                        "Normal" -> Color(0xFFF9A825)
                                         else -> MaterialTheme.colorScheme.primary
                                     }
                                 )
@@ -131,6 +133,7 @@ fun AnnouncementsScreen(modifier: Modifier = Modifier) {
                                     color = when (announcement.priority) {
                                         "High" -> Color(0xFFD32F2F)
                                         "Low" -> Color(0xFF2E7D32)
+                                        "Normal" -> Color(0xFFF9A825)
                                         else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                     }
                                 )

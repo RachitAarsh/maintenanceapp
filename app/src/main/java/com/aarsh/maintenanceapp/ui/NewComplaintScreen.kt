@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,14 +14,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.aarsh.maintenanceapp.R
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import androidx.compose.ui.graphics.Color
+import android.util.Log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewComplaintScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+    val db = FirebaseFirestore.getInstance()
+    var userName by remember { mutableStateOf("") }
+    
+    // Fetch user's name when the screen loads
+    LaunchedEffect(currentUser?.uid) {
+        if (currentUser != null) {
+            db.collection("users")
+                .document(currentUser.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    userName = document.getString("name") ?: ""
+                }
+        }
+    }
     
     fun showCustomToast(message: String) {
         val inflater = LayoutInflater.from(context)
@@ -39,28 +57,28 @@ fun NewComplaintScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp)
+            .padding(16.dp)
     ) {
         Text(
             text = "New Complaint",
-            style = MaterialTheme.typography.displayMedium,
-            modifier = Modifier.padding(bottom = 24.dp)
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        var name by remember { mutableStateOf("") }
+        var location by remember { mutableStateOf("") }
         var complaint by remember { mutableStateOf("") }
         var selectedCategory by remember { mutableStateOf("") }
         var selectedSubCategory by remember { mutableStateOf("") }
 
         OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Name") },
-            leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Name") },
+            value = location,
+            onValueChange = { location = it },
+            label = { Text("Location") },
+            leadingIcon = { Icon(Icons.Default.LocationOn, contentDescription = "Location") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
-            isError = name.isBlank()
+            isError = location.isBlank()
         )
 
         ComplaintForm(
@@ -80,35 +98,45 @@ fun NewComplaintScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp)
-                .padding(bottom = 24.dp),
+                .padding(bottom = 16.dp),
             minLines = 4
         )
 
         Button(
             onClick = {
-                if (name.isNotBlank() && selectedCategory.isNotBlank() && selectedSubCategory.isNotBlank()) {
-                    val db = FirebaseFirestore.getInstance()
+                if (currentUser == null) {
+                    showCustomToast("Please sign in to raise a complaint")
+                    return@Button
+                }
+                
+                if (location.isNotBlank() && selectedCategory.isNotBlank() && selectedSubCategory.isNotBlank()) {
                     val complaintMap = hashMapOf(
-                        "name" to name,
+                        "name" to userName,
+                        "location" to location,
                         "complaint" to complaint,
                         "category" to selectedCategory,
                         "subCategory" to selectedSubCategory,
                         "status" to "Pending",
-                        "timestamp" to Date()
+                        "date" to Date(),
+                        "userId" to currentUser.uid
                     )
                     
-                    db.collection("complaints")
-                        .add(complaintMap)
+                    val complaintsCollection = db.collection("complaints")
+                    complaintsCollection.add(complaintMap)
                         .addOnSuccessListener {
-                            name = ""
+                            location = ""
                             complaint = ""
                             selectedCategory = ""
                             selectedSubCategory = ""
-                            showCustomToast("Your complaint has been registered")
+                            showCustomToast("Complaint registered successfully")
+                        }
+                        .addOnFailureListener { e ->
+                            showCustomToast("Failed to register complaint: ${e.message}")
+                            Log.e("NewComplaintScreen", "Error adding complaint", e)
                         }
                 } else {
                     val missingFields = mutableListOf<String>()
-                    if (name.isBlank()) missingFields.add("Name")
+                    if (location.isBlank()) missingFields.add("Location")
                     if (selectedCategory.isBlank()) missingFields.add("Category")
                     if (selectedSubCategory.isBlank()) missingFields.add("Sub-Category")
                     
@@ -120,4 +148,5 @@ fun NewComplaintScreen(modifier: Modifier = Modifier) {
             Text("Raise Ticket", color = Color.White)
         }
     }
-} 
+}
+

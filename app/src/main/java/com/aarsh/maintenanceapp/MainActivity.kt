@@ -1,8 +1,10 @@
 package com.aarsh.maintenanceapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -36,6 +38,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.tasks.await
 import android.widget.Toast
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 sealed class Screen(val route: String, val icon: @Composable () -> Unit, val text: String) {
     object Splash : Screen(
@@ -80,14 +87,36 @@ fun MaintenanceTabRow(
 ) {
     NavigationBar {
         allScreens.forEach { screen ->
+            val selected = currentScreen == screen
             NavigationBarItem(
-                icon = screen.icon,
-                label = { Text(screen.text) },
-                selected = currentScreen == screen,
-                onClick = { onTabSelected(screen) }
+                icon = {
+                    screen.iconWithColor(Color.Black)()
+                },
+                label = {
+                    Text(
+                        screen.text,
+                        fontSize = 11.sp,
+                        maxLines = 1,
+                        modifier = Modifier.padding(top = 0.dp)
+                    )
+                },
+                selected = selected,
+                onClick = { onTabSelected(screen) },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = MaterialTheme.colorScheme.primary
+                )
             )
         }
     }
+}
+
+fun Screen.iconWithColor(color: Color): @Composable () -> Unit = when (this) {
+    is Screen.Splash -> { { Icon(Icons.Filled.List, contentDescription = "Splash", tint = color) } }
+    is Screen.Status -> { { Icon(Icons.Filled.List, contentDescription = "Status", tint = color) } }
+    is Screen.NewComplaint -> { { Icon(Icons.Filled.Add, contentDescription = "New Complaint", tint = color) } }
+    is Screen.Announcements -> { { Icon(Icons.Filled.Info, contentDescription = "Announcements", tint = color) } }
+    is Screen.Profile -> { { Icon(Icons.Filled.Person, contentDescription = "Profile", tint = color) } }
+    else -> { { Icon(Icons.Filled.Info, contentDescription = "Other", tint = color) } }
 }
 
 class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListener {
@@ -97,54 +126,22 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
+        // Initialize Firebase first
+        FirebaseApp.initializeApp(this)
+        auth = Firebase.auth
+        
+        // Enable Firebase persistence
+        FirebaseFirestore.getInstance().firestoreSettings = FirebaseFirestoreSettings.Builder()
+            .setPersistenceEnabled(true)
+            .build()
+        
         // Initialize security provider
         ProviderInstaller.installIfNeededAsync(this, this)
-        
-        // Initialize Firebase in background
-        coroutineScope.launch {
-            try {
-                // Check Google Play Services availability
-                val googleApiAvailability = GoogleApiAvailability.getInstance()
-                val resultCode = googleApiAvailability.isGooglePlayServicesAvailable(this@MainActivity)
-                if (resultCode != ConnectionResult.SUCCESS) {
-                    withContext(Dispatchers.Main) {
-                        googleApiAvailability.getErrorDialog(this@MainActivity, resultCode, 1)?.show()
-                    }
-                }
-                
-                // Initialize Firebase
-                FirebaseApp.initializeApp(this@MainActivity)
-                auth = Firebase.auth
-                
-                // Sign in anonymously if not already signed in
-                if (auth.currentUser == null) {
-                    try {
-                        auth.signInAnonymously().await()
-                    } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Authentication failed: ${e.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Initialization error: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
         
         setContent {
             MaintenanceAppTheme {
                 val navController = rememberNavController()
-                var isAuthenticated by remember { mutableStateOf(FirebaseAuth.getInstance().currentUser != null) }
+                var isAuthenticated by remember { mutableStateOf(auth.currentUser != null) }
                 val currentBackStack by navController.currentBackStackEntryAsState()
                 val currentDestination = currentBackStack?.destination
                 val currentScreen = maintenanceTabRowScreens.find { it.route == currentDestination?.route } ?: Screen.Status
@@ -156,7 +153,7 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
                     composable(route = Screen.Splash.route) {
                         SplashScreen(
                             onSplashFinished = {
-                                if (FirebaseAuth.getInstance().currentUser == null) {
+                                if (auth.currentUser == null) {
                                     navController.navigate("auth") {
                                         popUpTo(Screen.Splash.route) { inclusive = true }
                                     }
@@ -172,21 +169,32 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
                         AuthScreen(onAuthSuccess = {
                             isAuthenticated = true
                             navController.navigate(Screen.Status.route) {
-                                popUpTo("auth") { inclusive = true }
+                                popUpTo(0) { inclusive = true }
+                                launchSingleTop = true
                             }
                         })
                     }
                     composable(route = Screen.Status.route) {
                         if (isAuthenticated) {
+                            // Show exit confirmation only when on the root screen (Status)
+                            BackHandler {
+                                android.app.AlertDialog.Builder(this@MainActivity)
+                                    .setTitle("Exit App")
+                                    .setMessage("Are you sure you want to exit?")
+                                    .setPositiveButton("Exit") { _, _ ->
+                                        finish()
+                                    }
+                                    .setNegativeButton("Cancel", null)
+                                    .show()
+                            }
+                            
                             Scaffold(
                                 bottomBar = {
                                     MaintenanceTabRow(
                                         allScreens = maintenanceTabRowScreens,
                                         onTabSelected = { screen ->
                                             navController.navigate(screen.route) {
-                                                popUpTo(navController.graph.startDestinationId) {
-                                                    saveState = true
-                                                }
+                                                popUpTo(Screen.Status.route)
                                                 launchSingleTop = true
                                                 restoreState = true
                                             }
@@ -198,25 +206,30 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
                                 StatusScreen(modifier = Modifier.padding(innerPadding))
                             }
                         } else {
-                            // If not authenticated, redirect to auth
                             LaunchedEffect(Unit) {
                                 navController.navigate("auth") {
-                                    popUpTo(Screen.Status.route) { inclusive = true }
+                                    popUpTo(0) { inclusive = true }
                                 }
                             }
                         }
                     }
                     composable(route = Screen.NewComplaint.route) {
                         if (isAuthenticated) {
+                            // Allow normal back navigation to Status screen
+                            BackHandler {
+                                navController.navigate(Screen.Status.route) {
+                                    popUpTo(Screen.Status.route) { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            }
+                            
                             Scaffold(
                                 bottomBar = {
                                     MaintenanceTabRow(
                                         allScreens = maintenanceTabRowScreens,
                                         onTabSelected = { screen ->
                                             navController.navigate(screen.route) {
-                                                popUpTo(navController.graph.startDestinationId) {
-                                                    saveState = true
-                                                }
+                                                popUpTo(Screen.Status.route)
                                                 launchSingleTop = true
                                                 restoreState = true
                                             }
@@ -237,15 +250,21 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
                     }
                     composable(route = Screen.Announcements.route) {
                         if (isAuthenticated) {
+                            // Allow normal back navigation to Status screen
+                            BackHandler {
+                                navController.navigate(Screen.Status.route) {
+                                    popUpTo(Screen.Status.route) { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            }
+                            
                             Scaffold(
                                 bottomBar = {
                                     MaintenanceTabRow(
                                         allScreens = maintenanceTabRowScreens,
                                         onTabSelected = { screen ->
                                             navController.navigate(screen.route) {
-                                                popUpTo(navController.graph.startDestinationId) {
-                                                    saveState = true
-                                                }
+                                                popUpTo(Screen.Status.route)
                                                 launchSingleTop = true
                                                 restoreState = true
                                             }
@@ -266,15 +285,21 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
                     }
                     composable(route = Screen.Profile.route) {
                         if (isAuthenticated) {
+                            // Allow normal back navigation to Status screen
+                            BackHandler {
+                                navController.navigate(Screen.Status.route) {
+                                    popUpTo(Screen.Status.route) { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            }
+                            
                             Scaffold(
                                 bottomBar = {
                                     MaintenanceTabRow(
                                         allScreens = maintenanceTabRowScreens,
                                         onTabSelected = { screen ->
                                             navController.navigate(screen.route) {
-                                                popUpTo(navController.graph.startDestinationId) {
-                                                    saveState = true
-                                                }
+                                                popUpTo(Screen.Status.route)
                                                 launchSingleTop = true
                                                 restoreState = true
                                             }
@@ -285,15 +310,36 @@ class MainActivity : ComponentActivity(), ProviderInstaller.ProviderInstallListe
                             ) { innerPadding ->
                                 ProfileScreen(
                                     onLogout = {
+                                        auth.signOut()
                                         isAuthenticated = false
                                         navController.navigate("auth") {
                                             popUpTo(Screen.Profile.route) { inclusive = true }
                                         }
                                     },
                                     onDelete = {
-                                        isAuthenticated = false
-                                        navController.navigate("auth") {
-                                            popUpTo(Screen.Profile.route) { inclusive = true }
+                                        auth.currentUser?.let { user ->
+                                            user.delete()?.addOnCompleteListener { task ->
+                                                if (task.isSuccessful) {
+                                                    isAuthenticated = false
+                                                    navController.navigate("auth") {
+                                                        popUpTo(Screen.Profile.route) { inclusive = true }
+                                                    }
+                                                } else {
+                                                    // Handle deletion failure
+                                                    Toast.makeText(
+                                                        this@MainActivity,
+                                                        "Failed to delete account: ${task.exception?.message}",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+                                        } ?: run {
+                                            // User is null, just sign out
+                                            auth.signOut()
+                                            isAuthenticated = false
+                                            navController.navigate("auth") {
+                                                popUpTo(Screen.Profile.route) { inclusive = true }
+                                            }
                                         }
                                     }
                                 )

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.2.2" type="partial_results">
+    <map id="UnsafeIntentLaunch">
+            <map id="unprotected">
+                <entry
+                    name="com.aarsh.maintenanceapp.admin.MainActivity"
+                    boolean="true"/>
+            </map>
+    </map>
+    <map id="UnusedResources">
+        <location id="R.mipmap.ic_launcher"
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/mipmap-anydpi/ic_launcher.xml"
+            line="2"
+            column="1"
+            startOffset="39"
+            endLine="6"
+            endColumn="17"
+            endOffset="343"/>
+        <location id="R.drawable.ic_launcher_foreground"
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/drawable/ic_launcher_foreground.xml"
+            line="1"
+            column="1"
+            startOffset="0"
+            endLine="30"
+            endColumn="10"
+            endOffset="1702"/>
+        <entry
+            name="model"
+            string="drawable[ic_nfl_logoadminss(U),ic_launcher_foreground(D),ic_nfl_logo(U),ic_launcher_background(D),ic_launcher_foreground_1(E)],integer[google_play_services_version(R)],mipmap[ic_launcher_round(D),ic_launcher(D)],string[app_name(U)],style[Theme_MaintenanceAppAdmin(U)],xml[data_extraction_rules(U),file_paths(U),backup_rules(U)];1^4,6^3^1,7^3^1;;;"/>
+        <location id="R.drawable.ic_launcher_background"
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/drawable/ic_launcher_background.xml"
+            line="2"
+            column="1"
+            startOffset="39"
+            endLine="170"
+            endColumn="10"
+            endOffset="5605"/>
+        <location id="R.mipmap.ic_launcher_round"
+            file="${:admin*debug*MAIN*sourceProvider*0*resDir*0}/mipmap-anydpi/ic_launcher_round.xml"
+            line="2"
+            column="1"
+            startOffset="39"
+            endLine="6"
+            endColumn="17"
+            endOffset="343"/>
+    </map>
+
+</incidents>

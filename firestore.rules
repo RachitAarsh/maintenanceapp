@@ -1,16 +1,50 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow users to read/write their own user profile
+    // Simple admin check
+    function isAdmin() {
+      return request.auth != null && 
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // Simple user check
+    function isUser() {
+      return request.auth != null;
+    }
+
+    // Admin collection rules
+    match /admins/{adminId} {
+      // Anyone can read to check if they're an admin
+      allow read: if request.auth != null;
+      // Only allow creating your own admin document
+      allow create: if request.auth != null && 
+                   request.auth.uid == adminId;
+      // Only allow updating your own admin document
+      allow update: if request.auth != null && 
+                   request.auth.uid == adminId;
+      // Only allow deleting your own admin document
+      allow delete: if request.auth != null && 
+                   request.auth.uid == adminId;
+    }
+    
+    // User collection rules
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if isUser() && (request.auth.uid == userId || isAdmin());
+      allow write: if isUser() && request.auth.uid == userId;
     }
-    // Allow anyone to read/write complaints and status (for now)
+    
+    // Complaints collection rules
     match /complaints/{complaintId} {
-      allow read, write: if true;
+      allow read: if isUser();
+      allow create: if isUser() && request.resource.data.userId == request.auth.uid;
+      allow update: if isUser() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow delete: if isUser() && (resource.data.userId == request.auth.uid || isAdmin());
     }
-    match /status/{statusId} {
-      allow read, write: if true;
+
+    // Announcements collection rules
+    match /announcements/{announcementId} {
+      allow read: if isUser();
+      allow write: if isAdmin();
     }
   }
 } 

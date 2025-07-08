@@ -24,10 +24,11 @@ import com.aarsh.maintenanceapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.compose.ui.platform.LocalContext
+import com.google.firebase.firestore.FieldValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AuthScreen(onAuthSuccess: () -> Unit) {
+fun AuthScreen(onAuthSuccess: () -> Unit) { 
     val context = LocalContext.current
     var selectedTab by remember { mutableStateOf(0) }
     val tabTitles = listOf("Sign Up", "Login")
@@ -35,29 +36,33 @@ fun AuthScreen(onAuthSuccess: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
+        // Logo
         Image(
             painter = painterResource(id = R.drawable.ic_nfl_logo),
-            contentDescription = "App Logo",
-            modifier = Modifier.size(80.dp)
+            contentDescription = "Logo",
+            modifier = Modifier
+                .size(120.dp)
+                .padding(bottom = 32.dp)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+
+        // Title
         Text(
-            text = "NFL IT Maintenance",
+            text = "Maintenance App",
+            fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            color = Color(0xFF388E3C)
+            modifier = Modifier.padding(bottom = 32.dp)
         )
-        Text(
-            text = "Sign up or log in to continue",
-            fontSize = 14.sp,
-            color = Color.Gray,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        TabRow(selectedTabIndex = selectedTab, containerColor = Color.White) {
+
+        // Tab Row
+        TabRow(
+            selectedTabIndex = selectedTab,
+            containerColor = Color.Transparent,
+            contentColor = Color(0xFF2196F3)
+        ) {
             tabTitles.forEachIndexed { index, title ->
                 Tab(
                     selected = selectedTab == index,
@@ -66,13 +71,13 @@ fun AuthScreen(onAuthSuccess: () -> Unit) {
                 )
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
+
         Card(
             shape = RoundedCornerShape(20.dp),
             elevation = CardDefaults.cardElevation(8.dp),
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = Color(0xFFE3F2FD)
             )
         ) {
             Box(modifier = Modifier.padding(24.dp)) {
@@ -139,16 +144,25 @@ fun AuthScreen(onAuthSuccess: () -> Unit) {
                                                 val user = auth.currentUser
                                                 val db = FirebaseFirestore.getInstance()
                                                 val userMap = hashMapOf(
-                                                    "uid" to (user?.uid ?: ""),
                                                     "name" to name,
                                                     "email" to email,
-                                                    "phone" to phone
+                                                    "phone" to phone,
+                                                    "createdAt" to FieldValue.serverTimestamp()
                                                 )
-                                                db.collection("users").document(user?.uid ?: "").set(userMap)
-                                                Toast.makeText(context, "Sign up successful!", Toast.LENGTH_SHORT).show()
-                                                onAuthSuccess()
+                                                user?.let { currentUser ->
+                                                    db.collection("users").document(currentUser.uid).set(userMap)
+                                                        .addOnSuccessListener {
+                                                            Toast.makeText(context, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                                                            onAuthSuccess()
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            error = "Failed to save user data: ${e.message}"
+                                                        }
+                                                } ?: run {
+                                                    error = "Failed to create user account"
+                                                }
                                             } else {
-                                                error = "Sign up failed: ${task.exception?.message}" 
+                                                error = "Sign up failed: ${task.exception?.message}"
                                             }
                                         }
                                 }
@@ -205,7 +219,7 @@ fun AuthScreen(onAuthSuccess: () -> Unit) {
                                                 Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
                                                 onAuthSuccess()
                                             } else {
-                                                error = "Login failed: ${task.exception?.message}" 
+                                                error = "Login failed: ${task.exception?.message}"
                                             }
                                         }
                                 }

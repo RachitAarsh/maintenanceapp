@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NFL IT Maintenance Admin</string>
+    <string name="firebase_database_url" translatable="false">https://mntap-85f0a-default-rtdb.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">544645717061</string>
+    <string name="google_api_key" translatable="false">AIzaSyAv9RwXJm4YG44BCdRYeYS9Mn8igcoNOow</string>
+    <string name="google_app_id" translatable="false">1:544645717061:android:08414ea40e7916b511572c</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAv9RwXJm4YG44BCdRYeYS9Mn8igcoNOow</string>
+    <string name="google_storage_bucket" translatable="false">mntap-85f0a.firebasestorage.app</string>
+    <string name="project_id" translatable="false">mntap-85f0a</string>
+    <style name="Theme.MaintenanceAppAdmin" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+        <item name="android:windowSplashScreenBackground">@android:color/transparent</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@android:color/transparent</item>
+        <item name="android:windowSplashScreenBrandingImage">@android:color/transparent</item>
+    </style>
+</resources>

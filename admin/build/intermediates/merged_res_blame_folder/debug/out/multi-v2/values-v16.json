@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.aarsh.maintenanceapp.admin-mergeDebugResources-56:/values-v16/values-v16.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\aarsh\\.gradle\\caches\\8.11.1\\transforms\\0c788049839b8c17ba009a77a91b41fc\\transformed\\core-1.12.0\\res\\values-v16\\values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "65",
+                        "endOffsets": "116"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -51,15 +51,15 @@ fun ProfileScreen(onLogout: () -> Unit, onDelete: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "Profile",
-            style = MaterialTheme.typography.displayMedium,
+            style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(bottom = 24.dp)
+                .padding(bottom = 16.dp)
         )
         Card(
             shape = RoundedCornerShape(20.dp),
@@ -67,7 +67,7 @@ fun ProfileScreen(onLogout: () -> Unit, onDelete: () -> Unit) {
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
-            Box(modifier = Modifier.padding(24.dp)) {
+            Box(modifier = Modifier.padding(16.dp)) {
                 if (loading) {
                     CircularProgressIndicator()
                 } else {
@@ -141,15 +141,19 @@ fun ProfileScreen(onLogout: () -> Unit, onDelete: () -> Unit) {
                             onClick = {
                                 error = ""; success = ""
                                 // Delete user from Auth and Firestore
-                                user?.delete()?.addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        user.uid.let { uid ->
-                                            db.collection("users").document(uid).delete()
+                                user?.let { currentUser ->
+                                    currentUser.delete()?.addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            currentUser.uid.let { uid ->
+                                                db.collection("users").document(uid).delete()
+                                            }
+                                            onDelete()
+                                        } else {
+                                            error = "Failed to delete account: ${task.exception?.message}"
                                         }
-                                        onDelete()
-                                    } else {
-                                        error = "Failed to delete account: ${task.exception?.message}"
                                     }
+                                } ?: run {
+                                    error = "No user found to delete"
                                 }
                             },
                             modifier = Modifier.fillMaxWidth(),
